@@ -3,13 +3,13 @@ SimpleFTP
 
 The Home Work of Course APUE
 
-Daniel Lai <lai.danran@gmail.com>
-2014.02
+Author: Daniel Lai <lai.danran@gmail.com> 2014.02
 
 CONTENTS:
+
     files
+
     instructions
-    references
 	
 	
 FILES:
