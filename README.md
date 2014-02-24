@@ -7,13 +7,14 @@ Daniel Lai <lai.danran@gmail.com>
 2014.02
 
 CONTENTS:
-	files
-	instructions
-	references
+    files
+    instructions
+    references
 	
 	
 FILES:
-	Makefile
+    
+    Makefile
 		compilation script.
 	
 	bin/
