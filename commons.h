@@ -45,7 +45,7 @@ enum TYPE
 #define er(e, x)\
     do\
     {\
-        perror("ERROR IN: " #e "\n");\
+        perror("ERROR IN: " #e " ");\
         fprintf(stderr, "%d\n", x);\
         exit(-1);\
     }\

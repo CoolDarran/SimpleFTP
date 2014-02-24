@@ -50,9 +50,9 @@ void printpacket(struct packet* p, int ptype)
     if(!DEBUG)
         return;
     if(ptype)
-        printf("\t\tHOST PACKET\n");
+        printf("\tHOST PACKET\n");
     else
-        printf("\t\tNETWORK PACKET\n");
+        printf("\tNETWORK PACKET\n");
 
     printf("\t\tconid = %d\n", p->conid);
     printf("\t\ttype = %d\n", p->type);
