@@ -112,15 +112,15 @@ void command_get(struct packet* chp, struct packet* data, int sfd_client, char* 
         er("recv()", x);
     chp = ntohp(data);
     
-    if(DEBUG)
-        printf(ID "begin recieving file...\n");
-
     printpacket(chp, HP);
 
     if(chp->type == INFO && chp->comid == GET && strlen(chp->buffer))
     {
         printf("\t%s\n", chp->buffer);
         //receive_file(chp, data, sfd_client, f);
+        if(DEBUG)
+            printf(ID "begin recieving file...\n");
+        
         receive_file(chp, data, sfd_server_data, f);
         fclose(f);
     }
@@ -178,18 +178,16 @@ void command_prt(struct packet* chp, struct packet* data, int sfd_client, char* 
 
     while(chp->type != EOT)
     {
-        if(chp->type == REQU && chp->comid == PRT && strlen(chp->buffer))
-            ;//printf("\t%s\n", chp->buffer);
-        /*
-        else
-            fprintf(stderr, "\t Error executing command on server.\n");
-        */
-
         if(( x = recv(sfd_client, data, size_packet, 0)) <= 0)
             er("recv()", x);
         chp = ntohp(data);
 
         printpacket(chp, HP);
+
+        if(chp->type == INFO && chp->comid == PRT && strlen(chp->buffer))
+            printf("\t%s\n", chp->buffer);
+        else
+            fprintf(stderr, "\t ER: Error executing command on server.\n");
        
         if(DEBUG)
             printf(ID "OK, begining connection\n");
@@ -225,13 +223,10 @@ void command_dir(struct packet* chp, struct packet* data, int sfd_client)
     {
         // printpacket(chp, HP);
         // printpacket(data, HP);
+        
         if(chp->type == DATA && chp->comid == DIR_ && strlen(chp->buffer))
             printf("\t%s\n", chp->buffer);
-        /*
-        else
-            fprintf(stderr, "\t Error executing command on server.\n");
-        */
-        
+
         //if((x = recv(sfd_client, data, size_packet, 0)) <= 0)
         if(( x = recv(sfd_server_data, data, size_packet, 0)) <= 0)
             er("recv()", x);

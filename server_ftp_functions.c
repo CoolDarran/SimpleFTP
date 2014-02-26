@@ -24,7 +24,7 @@ void command_get(struct packet* shp, struct packet* data, int sfd_client, char* 
     FILE* f = fopen(shp->buffer, "rb");
     shp->type = INFO;
     shp->comid = GET;
-    strcpy(shp->buffer, f ? "File found; processing..." : "Error opening file.");
+    strcpy(shp->buffer, f ? "OK: File found; processing..." : "ER: Error opening file.");
     printpacket(shp, HP);
     data = htonp(shp);
     if(( x = send(sfd_client, data, size_packet, 0)) != size_packet)
@@ -47,8 +47,22 @@ void command_dir(struct packet* shp, struct packet* data, int sfd_client, char* 
     shp->type = DATA;
     DIR* d = opendir(lpwd);
     if(!d)
+    {
         er("opendir()", (int) d);
+        sprintf(shp->buffer, "ER: could not get the dir info!\n");
+        data = htonp(shp);
+        if( (x = send(sfd_server_data, data, size_packet,0)) != size_packet)
+            er("send()",x);
+    }
+    else
+    {
+        sprintf(shp->buffer, "OK: get the dir info.\n");
+        data = htonp(shp);
+        if(( x = send(sfd_server_data, data, size_packet, 0)) != size_packet)
+            er("send()",x);
+    }
     struct dirent* e;
+
     while(e = readdir(d))
     {
         sprintf(shp->buffer, "%s\t%s", e->d_type == 4 ? "DIR:" : e->d_type == 8 ? "FILE:" : "UNDEF:" , e->d_name);
@@ -70,7 +84,7 @@ void command_prt(struct packet* shp, struct packet* data, int sfd_client, char* 
     int dataportnum = atoi(shp->buffer);
     shp->type = INFO;
     shp->comid = PRT;
-    strcpy(shp->buffer, dataportnum ? "Port Gotten; processing..." : "Error getting port num.");
+    strcpy(shp->buffer, dataportnum ? "OK: Port Gotten; processing..." : "ER: Error getting port num.");
  
     printpacket(shp, HP);
 
